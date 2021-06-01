@@ -8,6 +8,11 @@ def row_distance(row1, row2):
     INPUT: two rows which should be Pandas series or array-type, not data frame 
     OUTPUT: Euclidean disstance
     '''
+
+    pt1=np.array(row1)
+    pt2=np.array(row2)
+    dist=np.sqrt(sum((pt1-pt2)**2))
+    return dist
     
 
 def calc_distance_to_all_rows(df,example_row ):
@@ -17,6 +22,18 @@ def calc_distance_to_all_rows(df,example_row ):
     INPUT: df, Pandas dataframe; example_row
     OUTPUT:Pandas dataframe with additional column 'distance_to_ex' added to input dataframe df
     '''
+    distances=[]
+    attribute_df=df.drop(['Class'],axis=1)
+    num_rows=df.shape[0]
+    for row_num in np.arange(num_rows):
+
+        current_row=attribute_df.iloc[row_num,:]
+        current_distance=row_distance(current_row,example_row)
+        distances.append(current_distance)
+    return_df=df.assign(distance_to_ex=distances)
+    return return_df
+    
+ 
     
     
 
@@ -28,7 +45,11 @@ def find_k_closest(df, example_row, k):
     INPUT: df, Pandas dataframe; example_row, Pandas series or array type; k, integer number of nearest neighbors.
     OUTPUT: dataframe in same format as input df but with k rows and sorted by 'distance_to_ex.'
     """
-    
+    ret_df=calc_distance_to_all_rows(df,example_row)
+    sort_df=ret_df.sort_values(by=['distance_to_ex'])
+    return sort_df[0:k]
+
+
     
 def classify(df, example_row, k):
     """
@@ -37,4 +58,8 @@ def classify(df, example_row, k):
     INPUT: df, Pandas dataframe; example_row, Pandas series or array type; k, integer number of nearest neighbors
     OUTPUT: string referring to closest class.
     """
-    
+    k_df= find_k_closest(df,example_row,k)
+    sorted_df=get_sorted_k_counts(k_df)
+    return majority_class(sorted_df)
+
+
