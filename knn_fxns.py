@@ -8,6 +8,7 @@ def row_distance(row1, row2):
     INPUT: two rows which should be Pandas series or array-type, not data frame 
     OUTPUT: Euclidean disstance
     '''
+#rielys computer was here
 
     pt1=np.array(row1)
     pt2=np.array(row2)
