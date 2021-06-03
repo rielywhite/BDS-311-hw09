@@ -24,10 +24,10 @@ def calc_distance_to_all_rows(df,example_row ):
     OUTPUT:Pandas dataframe with additional column 'distance_to_ex' added to input dataframe df
     '''
     distances=[]
-    attribute_df=df.drop(['Class'],axis=1)
+    attribute_df=df.drop(['class'],axis=1)
     num_rows=df.shape[0]
+    
     for row_num in np.arange(num_rows):
-
         current_row=attribute_df.iloc[row_num,:]
         current_distance=row_distance(current_row,example_row)
         distances.append(current_distance)
@@ -60,7 +60,9 @@ def classify(df, example_row, k):
     OUTPUT: string referring to closest class.
     """
     k_df= find_k_closest(df,example_row,k)
-    sorted_df=get_sorted_k_counts(k_df)
-    return majority_class(sorted_df)
+    group_by=k_df.groupby(['class']).size().reset_index(name='nums')
+    sorted_df=grouped_df.sort_values(by=['nums'])
+    majority_class=sorted_df['class'].iloc[0]
+    return majority_class
 
 
