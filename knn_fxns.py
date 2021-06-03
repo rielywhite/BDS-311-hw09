@@ -61,7 +61,7 @@ def classify(df, example_row, k):
     """
     k_df= find_k_closest(df,example_row,k)
     group_by=k_df.groupby(['class']).size().reset_index(name='nums')
-    sorted_df=grouped_df.sort_values(by=['nums'])
+    sorted_df=group_by.sort_values(by=['nums'])
     majority_class=sorted_df['class'].iloc[0]
     return majority_class
 
