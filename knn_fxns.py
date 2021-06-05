@@ -66,3 +66,19 @@ def classify(df, example_row, k):
     return majority_class
 
 
+def evaluate_accuracy(training_df1,training_df2, test_df,k):
+    '''Returns the proportion of the test_df that was correctly classified'''
+    
+    num_correct=0
+    num_rows=test_df.shape[0]
+    test_attribute_df=test_df.drop(['class'],axis=1)
+    training_dataframes=[training_df1,training_df2]
+    combined_training_df=pd.concat(training_dataframes)
+
+    
+    for num_row in np.arange(num_rows):
+        example_row=test_attribute_df.iloc[num_row,:]
+        c=classify(combined_training_df,example_row,k)
+        if c==test_df['class'].iloc[num_row]:
+            num_correct=num_correct+1
+    return num_correct/num_rows
