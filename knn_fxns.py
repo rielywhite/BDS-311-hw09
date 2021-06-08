@@ -68,7 +68,8 @@ def classify(df, example_row, k):
 
 def evaluate_accuracy(training_df1,training_df2, test_df,k):
     '''Returns the proportion of the test_df that was correctly classified'''
-    
+    #this is the function I made for the hw problem
+
     num_correct=0
     num_rows=test_df.shape[0]
     test_attribute_df=test_df.drop(['class'],axis=1)
